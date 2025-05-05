@@ -1,0 +1,835 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookNest - New Arrivals</title>
+    <style>
+        :root {
+            --primary: #5c44d4;
+            --secondary: #8274e8;
+            --accent: #f9c846;
+            --light: #f9f9f9;
+            --dark: #333333;
+            --success: #28a745;
+            --info: #17a2b8;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --white: #ffffff;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .search-bar {
+            flex-grow: 1;
+            max-width: 500px;
+            margin: 0 20px;
+            position: relative;
+        }
+
+            .search-bar input {
+                width: 100%;
+                padding: 10px 15px;
+                border: 1px solid var(--gray-light);
+                border-radius: 20px;
+                outline: none;
+                font-size: 14px;
+            }
+
+            .search-bar button {
+                position: absolute;
+                right: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+                background: none;
+                border: none;
+                color: var(--gray);
+                cursor: pointer;
+            }
+
+        .user-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--gray);
+            font-size: 18px;
+            position: relative;
+        }
+
+        .icon-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--danger);
+            color: var(--white);
+            font-size: 10px;
+            width: 15px;
+            height: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .main-nav {
+            background-color: var(--primary);
+            padding: 10px 0;
+        }
+
+        .nav-tabs {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding-bottom: 5px;
+        }
+
+            .nav-tabs li a {
+                color: var(--white);
+                text-decoration: none;
+                font-size: 16px;
+                font-weight: 500;
+                padding: 5px 0;
+                transition: all 0.3s ease;
+            }
+
+                .nav-tabs li a:hover,
+                .nav-tabs li a.active {
+                    color: var(--accent);
+                    border-bottom: 2px solid var(--accent);
+                }
+
+        /* Announcement Banner */
+        .announcement {
+            background-color: var(--warning);
+            color: var(--dark);
+            padding: 10px 0;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        /* Sections */
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        /* Book Grid */
+        .book-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .book-card {
+            background: var(--white);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+            .book-card:hover {
+                transform: translateY(-5px);
+            }
+
+        .book-cover {
+            height: 270px;
+            overflow: hidden;
+            position: relative;
+        }
+
+            .book-cover img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+        .book-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--danger);
+            color: var(--white);
+            font-size: 12px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+
+        .book-info {
+            padding: 15px;
+        }
+
+        .book-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--dark);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            height: 42px;
+        }
+
+        .book-author {
+            color: var(--gray);
+            font-size: 14px;
+            margin-bottom: 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .book-price {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .current-price {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .original-price {
+            font-size: 14px;
+            color: var(--gray);
+            text-decoration: line-through;
+        }
+
+        .discount-percent {
+            background-color: var(--success);
+            color: var(--white);
+            font-size: 12px;
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+
+        .book-rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+
+        .rating-stars {
+            color: var(--accent);
+            font-size: 14px;
+        }
+
+        .rating-count {
+            color: var(--gray);
+            font-size: 12px;
+        }
+
+        .book-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-sm {
+            padding: 8px 12px;
+            font-size: 14px;
+            border-radius: 4px;
+        }
+
+        .btn-cart {
+            background-color: var(--primary);
+            color: var(--white);
+            flex-grow: 1;
+            text-align: center;
+        }
+
+        .btn-wishlist {
+            background-color: var(--gray-light);
+            color: var(--gray);
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            background-color: var(--white);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .filter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .filter-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .filter-reset {
+            color: var(--primary);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .filter-group {
+            margin-bottom: 10px;
+        }
+
+        .filter-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+
+        .filter-select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--gray-light);
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .price-range {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .price-input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--gray-light);
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .filter-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+            gap: 10px;
+        }
+
+        .btn-filter {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: var(--light);
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: var(--white);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+            .footer-links li {
+                margin-bottom: 10px;
+            }
+
+            .footer-links a {
+                color: var(--gray-light);
+                text-decoration: none;
+                transition: color 0.3s ease;
+            }
+
+                .footer-links a:hover {
+                    color: var(--accent);
+                }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-icon {
+            width: 36px;
+            height: 36px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+            .social-icon:hover {
+                background-color: var(--primary);
+                transform: translateY(-3px);
+            }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .header-top {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .search-bar {
+                max-width: 100%;
+                margin: 15px 0;
+            }
+
+            .book-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            .filter-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-tabs {
+                gap: 15px;
+                font-size: 14px;
+            }
+
+            .book-grid {
+                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            }
+
+            .btn-sm {
+                padding: 6px 10px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Announcement Banner -->
+    <div class="announcement">
+        📚 Spring Sale: 20% OFF on Selected Titles! Use Code: SPRING25 | Free in-store pickup on all orders
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-top">
+                <a href="home.html" class="logo">
+                    <div class="logo-icon">📚</div>
+                    <div class="logo-text">BookNest</div>
+                </a>
+                <div class="search-bar">
+                    <input type="text" placeholder="Search by title, author, ISBN or keywords...">
+                    <button>🔍</button>
+                </div>
+                <div class="user-actions">
+                    <button class="icon-btn">👤</button>
+                    <button class="icon-btn">
+                        ❤️
+                        <span class="icon-badge">3</span>
+                    </button>
+                    <button class="icon-btn">
+                        🛒
+                        <span class="icon-badge">2</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <nav class="main-nav">
+            <div class="container">
+                <ul class="nav-tabs">
+                    <li><a href="home.html">All Books</a></li>
+                    <li><a href="bestseller.html">Bestsellers</a></li>
+                    <li><a href="awardswinner.html">Award Winners</a></li>
+                    <li><a href="newrelease.html">New Releases</a></li>
+                    <li><a href="newarrivals.html" class="active">New Arrivals</a></li>
+                    <li><a href="comingsoon.html">Coming Soon</a></li>
+                    <li><a href="#">Deals</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Filter Section -->
+        <section class="filter-section">
+            <div class="filter-header">
+                <h2 class="filter-title">Filter New Arrivals</h2>
+                <button class="filter-reset">Reset All</button>
+            </div>
+            <div class="filter-grid">
+                <div class="filter-group">
+                    <label class="filter-label">Genre</label>
+                    <select class="filter-select">
+                        <option value="">All Genres</option>
+                        <option value="fiction">Fiction</option>
+                        <option value="non-fiction">Non-Fiction</option>
+                        <option value="mystery">Mystery & Thriller</option>
+                        <option value="sci-fi">Science Fiction</option>
+                        <option value="fantasy">Fantasy</option>
+                        <option value="romance">Romance</option>
+                        <option value="biography">Biography</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Author</label>
+                    <select class="filter-select">
+                        <option value="">All Authors</option>
+                        <option value="orwell">George Orwell</option>
+                        <option value="bronte">Charlotte Brontë</option>
+                        <option value="asimov">Isaac Asimov</option>
+                        <option value="austen">Jane Austen</option>
+                        <option value="huxley">Aldous Huxley</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Format</label>
+                    <select class="filter-select">
+                        <option value="">All Formats</option>
+                        <option value="paperback">Paperback</option>
+                        <option value="hardcover">Hardcover</option>
+                        <option value="signed">Signed Edition</option>
+                        <option value="limited">Limited Edition</option>
+                        <option value="first">First Edition</option>
+                        <option value="collectors">Collector's Edition</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Price Range</label>
+                    <div class="price-range">
+                        <input type="number" placeholder="Min" class="price-input">
+                        <span>-</span>
+                        <input type="number" placeholder="Max" class="price-input">
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Rating</label>
+                    <select class="filter-select">
+                        <option value="">All Ratings</option>
+                        <option value="4">4★ & Above</option>
+                        <option value="3">3★ & Above</option>
+                        <option value="2">2★ & Above</option>
+                        <option value="1">1★ & Above</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Language</label>
+                    <select class="filter-select">
+                        <option value="">All Languages</option>
+                        <option value="en">English</option>
+                        <option value="fr">French</option>
+                        <option value="es">Spanish</option>
+                        <option value="de">German</option>
+                        <option value="it">Italian</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Publisher</label>
+                    <select class="filter-select">
+                        <option value="">All Publishers</option>
+                        <option value="penguin">Penguin Random House</option>
+                        <option value="harpercollins">HarperCollins</option>
+                        <option value="scholastic">Scholastic</option>
+                        <option value="simon">Simon & Schuster</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Availability</label>
+                    <select class="filter-select">
+                        <option value="">All</option>
+                        <option value="in-stock">In Stock</option>
+                        <option value="library">Available in Library</option>
+                    </select>
+                </div>
+            </div>
+            <div class="filter-actions">
+                <button class="btn btn-sm btn-filter">Apply Filters</button>
+            </div>
+        </section>
+
+        <!-- New Arrivals Section -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">New Arrivals</h2>
+            </div>
+            <div class="book-grid">
+                <!-- Book 1 -->
+                <div class="book-card">
+                    <div class="book-cover">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Nineteen_Eighty-Four_First_Edition.jpg" alt="1984">
+                        <span class="book-badge">New Arrival</span>
+                    </div>
+                    <div class="book-info">
+                        <h3 class="book-title">1984</h3>
+                        <p class="book-author">George Orwell</p>
+                        <div class="book-price">
+                            <span class="current-price">$12.99</span>
+                            <span class="original-price">$16.99</span>
+                            <span class="discount-percent">-24%</span>
+                        </div>
+                        <div class="book-rating">
+                            <span class="rating-stars">★★★★★</span>
+                            <span class="rating-count">(620)</span>
+                        </div>
+                        <div class="book-actions">
+                            <a href="#" class="btn btn-sm btn-cart">Add to Cart</a>
+                            <button class="btn btn-sm btn-wishlist">❤️</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Book 2 -->
+                <div class="book-card">
+                    <div class="book-cover">
+                        <img src="https://upload.wikimedia.org/wikipedia/en/5/54/Jane_Eyre_1st_edition_cover.jpg" alt="Jane Eyre">
+                        <span class="book-badge">New Arrival</span>
+                    </div>
+                    <div class="book-info">
+                        <h3 class="book-title">Jane Eyre</h3>
+                        <p class="book-author">Charlotte Brontë</p>
+                        <div class="book-price">
+                            <span class="current-price">$11.99</span>
+                        </div>
+                        <div class="book-rating">
+                            <span class="rating-stars">★★★★☆</span>
+                            <span class="rating-count">(480)</span>
+                        </div>
+                        <div class="book-actions">
+                            <a href="#" class="btn btn-sm btn-cart">Add to Cart</a>
+                            <button class="btn btn-sm btn-wishlist">❤️</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Book 3 -->
+                <div class="book-card">
+                    <div class="book-cover">
+                        <img src="https://upload.wikimedia.org/wikipedia/en/3/3e/Foundation_1951_GnomePress.jpg" alt="Foundation">
+                        <span class="book-badge">New Arrival</span>
+                    </div>
+                    <div class="book-info">
+                        <h3 class="book-title">Foundation</h3>
+                        <p class="book-author">Isaac Asimov</p>
+                        <div class="book-price">
+                            <span class="current-price">$14.49</span>
+                            <span class="original-price">$18.99</span>
+                            <span class="discount-percent">-24%</span>
+                        </div>
+                        <div class="book-rating">
+                            <span class="rating-stars">★★★★☆</span>
+                            <span class="rating-count">(350)</span>
+                        </div>
+                        <div class="book-actions">
+                            <a href="#" class="btn btn-sm btn-cart">Add to Cart</a>
+                            <button class="btn btn-sm btn-wishlist">❤️</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Book 4 -->
+                <div class="book-card">
+                    <div class="book-cover">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a8/Pride_and_Prejudice_Cover_1813.jpg" alt="Pride and Prejudice">
+                        <span class="book-badge">New Arrival</span>
+                    </div>
+                    <div class="book-info">
+                        <h3 class="book-title">Pride and Prejudice</h3>
+                        <p class="book-author">Jane Austen</p>
+                        <div class="book-price">
+                            <span class="current-price">$10.99</span>
+                        </div>
+                        <div class="book-rating">
+                            <span class="rating-stars">★★★★★</span>
+                            <span class="rating-count">(510)</span>
+                        </div>
+                        <div class="book-actions">
+                            <a href="#" class="btn btn-sm btn-cart">Add to Cart</a>
+                            <button class="btn btn-sm btn-wishlist">❤️</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Book 5 -->
+                <div class="book-card">
+                    <div class="book-cover">
+                        <img src="https://upload.wikimedia.org/wikipedia/en/5/56/BraveNewWorld_FirstEdition.jpg" alt="Brave New World">
+                        <span class="book-badge">New Arrival</span>
+                    </div>
+                    <div class="book-info">
+                        <h3 class="book-title">Brave New World</h3>
+                        <p class="book-author">Aldous Huxley</p>
+                        <div class="book-price">
+                            <span class="current-price">$13.99</span>
+                            <span class="original-price">$17.99</span>
+                            <span class="discount-percent">-22%</span>
+                        </div>
+                        <div class="book-rating">
+                            <span class="rating-stars">★★★★☆</span>
+                            <span class="rating-count">(430)</span>
+                        </div>
+                        <div class="book-actions">
+                            <a href="#" class="btn btn-sm btn-cart">Add to Cart</a>
+                            <button class="btn btn-sm btn-wishlist">❤️</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>About BookNest</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Our Story</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Customer Service</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Returns</a></li>
+                        <li><a href="#">Shipping Info</a></li>
+                        <li><a href="#">FAQs</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Shop</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">All Books</a></li>
+                        <li><a href="#">Bestsellers</a></li>
+                        <li><a href="#">New Releases</a></li>
+                        <li><a href="#">Gift Cards</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Connect With Us</h3>
+                    <div class="social-links">
+                        <a href="#" class="social-icon">📘</a>
+                        <a href="#" class="social-icon">🐦</a>
+                        <a href="#" class="social-icon">📸</a>
+                        <a href="#" class="social-icon">▶️</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                © 2025 BookNest. All rights reserved. | Privacy Policy | Terms of Service
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

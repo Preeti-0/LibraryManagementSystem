@@ -1,0 +1,984 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookNest - Bestsellers</title>
+    <style>
+        :root {
+            --primary: #5c44d4;
+            --secondary: #8274e8;
+            --accent: #f9c846;
+            --light: #f9f9f9;
+            --dark: #333333;
+            --success: #28a745;
+            --info: #17a2b8;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --white: #ffffff;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .search-bar {
+            flex-grow: 1;
+            max-width: 500px;
+            margin: 0 20px;
+            position: relative;
+        }
+
+            .search-bar input {
+                width: 100%;
+                padding: 10px 15px;
+                border: 1px solid var(--gray-light);
+                border-radius: 20px;
+                outline: none;
+                font-size: 14px;
+            }
+
+            .search-bar button {
+                position: absolute;
+                right: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+                background: none;
+                border: none;
+                color: var(--gray);
+                cursor: pointer;
+            }
+
+        .user-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--gray);
+            font-size: 18px;
+            position: relative;
+        }
+
+        .icon-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--danger);
+            color: var(--white);
+            font-size: 10px;
+            width: 15px;
+            height: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .main-nav {
+            background-color: var(--primary);
+            padding: 10px 0;
+        }
+
+        .nav-tabs {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding-bottom: 5px;
+        }
+
+            .nav-tabs li a {
+                color: var(--white);
+                text-decoration: none;
+                font-size: 16px;
+                font-weight: 500;
+                padding: 5px 0;
+                transition: all 0.3s ease;
+            }
+
+                .nav-tabs li a:hover,
+                .nav-tabs li a.active {
+                    color: var(--accent);
+                    border-bottom: 2px solid var(--accent);
+                }
+
+        /* Page Header */
+        .page-header {
+            background-color: var(--secondary);
+            color: var(--white);
+            padding: 40px 0;
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.1) 2px, transparent 2px);
+            background-size: 30px 30px;
+            z-index: 1;
+        }
+
+        .page-header-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .page-header h1 {
+            font-size: 40px;
+            margin-bottom: 15px;
+            font-weight: 800;
+        }
+
+        .page-header p {
+            font-size: 16px;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        /* Announcement Banner */
+        .announcement {
+            background-color: var(--warning);
+            color: var(--dark);
+            padding: 10px 0;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        /* Bestsellers Filter Bar */
+        .bestseller-filter {
+            background-color: var(--white);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .filter-left {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .filter-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filter-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .filter-select {
+            padding: 8px 15px;
+            border: 1px solid var(--gray-light);
+            border-radius: 20px;
+            font-size: 14px;
+            min-width: 150px;
+        }
+
+        .bestseller-view {
+            display: flex;
+            gap: 10px;
+        }
+
+        .view-btn {
+            background-color: var(--gray-light);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+            .view-btn.active {
+                background-color: var(--primary);
+                color: var(--white);
+            }
+
+        /* Bestseller Lists Tabs */
+        .bestseller-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding-bottom: 5px;
+        }
+
+        .bestseller-tab {
+            padding: 10px 20px;
+            background-color: var(--white);
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+            .bestseller-tab.active {
+                background-color: var(--primary);
+                color: var(--white);
+            }
+
+        /* Book Grid */
+        .book-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .book-card {
+            background: var(--white);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+            .book-card:hover {
+                transform: translateY(-5px);
+            }
+
+        .book-cover {
+            height: 270px;
+            overflow: hidden;
+            position: relative;
+        }
+
+            .book-cover img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+        .book-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--danger);
+            color: var(--white);
+            font-size: 12px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+
+        .bestseller-rank {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: var(--primary);
+            color: var(--white);
+            font-size: 14px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .book-info {
+            padding: 15px;
+        }
+
+        .book-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--dark);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            height: 42px;
+        }
+
+        .book-author {
+            color: var(--gray);
+            font-size: 14px;
+            margin-bottom: 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .book-price {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .current-price {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .original-price {
+            font-size: 14px;
+            color: var(--gray);
+            text-decoration: line-through;
+        }
+
+        .discount-percent {
+            background-color: var(--success);
+            color: var(--white);
+            font-size: 12px;
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+
+        .book-rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+
+        .rating-stars {
+            color: var(--accent);
+            font-size: 14px;
+        }
+
+        .rating-count {
+            color: var(--gray);
+            font-size: 12px;
+        }
+
+        .book-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-sm {
+            padding: 8px 12px;
+            font-size: 14px;
+            border-radius: 4px;
+        }
+
+        .btn-cart {
+            background-color: var(--primary);
+            color: var(--white);
+            flex-grow: 1;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .btn-wishlist {
+            background-color: var(--gray-light);
+            color: var(--gray);
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* List View */
+        .book-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .book-list-item {
+            display: flex;
+            gap: 20px;
+            background-color: var(--white);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+            .book-list-item:hover {
+                transform: translateY(-5px);
+            }
+
+        .list-cover {
+            width: 150px;
+            height: 220px;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+            .list-cover img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+        .list-info {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .list-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .list-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .list-author {
+            color: var(--gray);
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .book-meta {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .book-description {
+            color: var(--dark);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .list-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .list-price {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .list-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin: 40px 0;
+            gap: 5px;
+        }
+
+        .page-item {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 14px;
+            font-weight: 500;
+            background-color: var(--white);
+            color: var(--dark);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+            .page-item.active {
+                background-color: var(--primary);
+                color: var(--white);
+            }
+
+            .page-item:hover:not(.active) {
+                background-color: var(--gray-light);
+            }
+
+        /* Features */
+        .features {
+            background-color: var(--white);
+            padding: 40px 0;
+            margin: 60px 0;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .feature-icon {
+            font-size: 24px;
+            color: var(--primary);
+            background-color: rgba(92, 68, 212, 0.1);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .feature-info h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+
+        .feature-info p {
+            color: var(--gray);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: var(--light);
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: var(--white);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+            .footer-links li {
+                margin-bottom: 10px;
+            }
+
+            .footer-links a {
+                color: var(--gray-light);
+                text-decoration: none;
+                transition: color 0.3s ease;
+            }
+
+                .footer-links a:hover {
+                    color: var(--accent);
+                }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-icon {
+            width: 36px;
+            height: 36px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+            .social-icon:hover {
+                background-color: var(--primary);
+                transform: translateY(-3px);
+            }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .header-top {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .search-bar {
+                max-width: 100%;
+                margin: 15px 0;
+            }
+
+            .bestseller-filter {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .filter-left {
+                flex-direction: column;
+                align-items: flex-start;
+                width: 100%;
+            }
+
+            .filter-item {
+                width: 100%;
+            }
+
+            .filter-select {
+                width: 100%;
+            }
+
+            .bestseller-tabs {
+                flex-wrap: wrap;
+            }
+
+            .book-list-item {
+                flex-direction: column;
+            }
+
+            .list-cover {
+                width: 100%;
+                height: 300px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-tabs {
+                gap: 15px;
+                font-size: 14px;
+            }
+
+            .book-grid {
+                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            }
+
+            .btn {
+                padding: 10px 16px;
+                font-size: 14px;
+            }
+        }
+
+        /* Hide list view initially */
+        .book-list {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Announcement Banner -->
+    <div class="announcement">
+        📚 Spring Sale: 20% OFF on Selected Titles! Use Code: SPRING25 | Free in-store pickup on all orders
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-top">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">📚</div>
+                    <div class="logo-text">BookNest</div>
+                </a>
+                <div class="search-bar">
+                    <input type="text" placeholder="Search by title, author, ISBN or keywords...">
+                    <button>🔍</button>
+                </div>
+                <div class="user-actions">
+                    <button class="icon-btn">👤</button>
+                    <button class="icon-btn">
+                        ❤️
+                        <span class="icon-badge">3</span>
+                    </button>
+                    <button class="icon-btn">
+                        🛒
+                        <span class="icon-badge">2</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <nav class="main-nav">
+            <div class="container">
+                <ul class="nav-tabs">
+                    <li><a href="home.html">All Book</a></li>
+                    <li><a href="bestseller.html" class="active">Bestsellers</a></li>
+                    <li><a href="awardswinner.html">Award Winners</a></li>
+                    <li><a href="newrelease.html">New Releases</a></li>
+                    <li><a href="newarrivals.html">New Arrivals</a></li>
+                    <li><a href="comingsoon.html">Coming Soon</a></li>
+                    <li><a href="#">Deals</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="header-pattern"></div>
+        <div class="page-header-content">
+            <h1>BookNest Bestsellers</h1>
+            <p>Discover the most popular books that readers can't get enough of. Our bestseller lists are updated weekly based on sales data across all our stores and online platforms.</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Bestseller Filter Bar -->
+        <div class="bestseller-filter">
+            <div class="filter-left">
+                <div class="filter-item">
+                    <span class="filter-label">List Type:</span>
+                    <select class="filter-select">
+                        <option value="weekly">Weekly Bestsellers</option>
+                        <option value="monthly">Monthly Bestsellers</option>
+                        <option value="yearly">Yearly Bestsellers</option>
+                        <option value="alltime">All Time Bestsellers</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <span class="filter-label">Sort By:</span>
+                    <select class="filter-select">
+                        <option value="rank">Bestseller Rank</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="rating">Customer Rating</option>
+                        <option value="newest">Newest First</option>
+                    </select>
+                </div>
+            </div>
+            <div class="bestseller-view">
+                <button class="view-btn active" id="grid-view" title="Grid View">📱</button>
+                <button class="view-btn" id="list-view" title="List View">📄</button>
+            </div>
+        </div>
+
+        <!-- Bestseller Tabs -->
+        <div class="bestseller-tabs">
+            <div class="bestseller-tab active">Fiction</div>
+            <div class="bestseller-tab">Non-Fiction</div>
+            <div class="bestseller-tab">Young Adult</div>
+            <div class="bestseller-tab">Children's</div>
+            <div class="bestseller-tab">Mystery & Thriller</div>
+            <div class="bestseller-tab">Science Fiction</div>
+            <div class="bestseller-tab">Romance</div>
+            <div class="bestseller-tab">Fantasy</div>
+        </div>
+
+        <!-- Grid View -->
+        <div class="book-grid" id="grid-view-container">
+            <!-- Book 1 -->
+            <div class="book-card">
+                <div class="book-cover">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/8/87/Hobbit_cover.JPG" alt="The Hobbit">
+                    <span class="bestseller-rank">1</span>
+                    <span class="book-badge">Hot</span>
+                </div>
+                <div class="book-info">
+                    <h3 class="book-title">The Hobbit</h3>
+                    <p class="book-author">J.R.R. Tolkien</p>
+                    <div class="book-price">
+                        <span class="current-price">$15.99</span>
+                        <span class="original-price">$19.99</span>
+                        <span class="discount-percent">-20%</span>
+                    </div>
+                    <div class="book-rating">
+                        <span class="rating-stars">★★★★★</span>
+                        <span class="rating-count">(482)</span>
+                    </div>
+                    <div class="book-actions">
+                        <a href="#" class="btn btn-sm btn-cart">Add to Cart</a>
+                        <button class="btn btn-sm btn-wishlist">❤️</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Book 2 -->
+            <div class="book-card">
+                <div class="book-cover">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/d/de/Dune-Frank_Herbert_%281965%29_First_edition.jpg" alt="Dune">
+                    <span class="bestseller-rank">2</span>
+                </div>
+                <div class="book-info">
+                    <h3 class="book-title">Dune</h3>
+                    <p class="book-author">Frank Herbert</p>
+                    <div class="book-price">
+                        <span class="current-price">$22.99</span>
+                    </div>
+                    <div class="book-rating">
+                        <span class="rating-stars">★★★★☆</span>
+                        <span class="rating-count">(326)</span>
+                    </div>
+                    <div class="book-actions">
+                        <a href="#" class="btn btn-sm btn-cart">Add to Cart</a>
+                        <button class="btn btn-sm btn-wishlist">❤️</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Book 3 -->
+            <div class="book-card">
+                <div class="book-cover">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/4/4a/And_Then_There_Were_None_First_Edition_Cover_1939.jpg" alt="And Then There Were None">
+                    <span class="bestseller-rank">3</span>
+                    <span class="book-badge">Sale</span>
+                </div>
+                <div class="book-info">
+                    <h3 class="book-title">And Then There Were None</h3>
+                    <p class="book-author">Agatha Christie</p>
+                    <div class="book-price">
+                        <span class="current-price">$12.99</span>
+                        <span class="original-price">$16.99</span>
+                        <span class="discount-percent">-25%</span>
+                    </div>
+                    <div class="book-rating">
+                        <span class="rating-stars">★★★★★</span>
+                        <span class="rating-count">(410)</span>
+                    </div>
+                    <div class="book-actions">
+                        <a href="#" class="btn btn-sm btn-cart">Add to Cart</a>
+                        <button class="btn btn-sm btn-wishlist">❤️</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Book 4 -->
+            <div class="book-card">
+                <div class="book-cover">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/4f/To_Kill_a_Mockingbird_%28first_edition_cover%29.jpg" alt="To Kill a Mockingbird">
+                    <span class="bestseller-rank">4</span>
+                </div>
+                <div class="book-info">
+                    <h3 class="book-title">To Kill a Mockingbird</h3>
+                    <p class="book-author">Harper Lee</p>
+                    <div class="book-price">
+                        <span class="current-price">$14.99</span>
+                    </div>
+                    <div class="book-rating">
+                        <span class="rating-stars">★★★★★</span>
+                        <span class="rating-count">(528)</span>
+                    </div>
+                    <div class="book-actions">
+                        <a href="#" class="btn btn-sm btn-cart">Add to Cart</a>
+                        <button class="btn btn-sm btn-wishlist">❤️</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Book 5 -->
+            <div class="book-card">
+                <div class="book-cover">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a8/Pride_and_Prejudice_Cover_1813.jpg" alt="Pride and Prejudice">
+                    <span class="bestseller-rank">5</span>
+                </div>
+                <div class="book-info">
+                    <h3 class="book-title">Pride and Prejudice</h3>
+                    <p class="book-author">Jane Austen</p>
+                    <div class="book-price">
+                        <span class="current-price">$9.99</span>
+                        <span class="original-price">$12.99</span>
+                        <span class="discount-percent">-23%</span>
+                    </div>
+                    <div class="book-rating">
+                        <span class="rating-stars">★
