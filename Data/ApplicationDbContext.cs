@@ -27,9 +27,14 @@ namespace LibraryManagementSystem.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Optional: Unique email for User
+            // Unique email for User
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Email)
+                .IsUnique();
+
+            // Unique username for User
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Username)
                 .IsUnique();
 
             // Optional: Review constraint (1 review per book per member)
