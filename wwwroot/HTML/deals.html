@@ -1,11 +1,11 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BookNest - Award Winners</title>
+    <title>BookNest - Deals</title>
     <style>
         :root {
             --primary: #26a69a;
@@ -121,11 +121,6 @@
         .search-bar button:hover {
             color: var(--primary);
             transform: translateY(-50%) scale(1.2);
-        }
-
-        .logo-icon i {
-            font-size: 30px;
-            color: var(--primary);
         }
 
         .user-actions i {
@@ -527,73 +522,18 @@
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             margin-bottom: 30px;
-        }
-
-        .filter-header {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
+            justify-content: flex-end;
         }
 
-        .filter-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--light);
-        }
-
-        .filter-reset {
-            color: var(--primary);
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .filter-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-        }
-
-        .filter-group {
-            margin-bottom: 10px;
-        }
-
-        .filter-label {
-            display: block;
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 5px;
-            color: var(--light);
-        }
-
-        .filter-select {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid var(--gray-dark);
-            border-radius: 4px;
-            font-size: 14px;
-            background: var(--gray-light);
-            color: var(--light);
-        }
-
-        .filter-select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 8px rgba(38, 166, 154, 0.3);
-            outline: none;
-        }
-
-        .price-range {
+        .filter-price {
             display: flex;
             gap: 10px;
             align-items: center;
         }
 
         .price-input {
-            width: 100%;
+            width: 100px;
             padding: 8px;
             border: 1px solid var(--gray-dark);
             border-radius: 4px;
@@ -610,8 +550,6 @@
 
         .filter-actions {
             display: flex;
-            justify-content: flex-end;
-            margin-top: 20px;
             gap: 10px;
         }
 
@@ -712,8 +650,13 @@
                 grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             }
 
-            .filter-grid {
-                grid-template-columns: 1fr;
+            .filter-section {
+                flex-direction: column;
+                align-items: flex-end;
+            }
+
+            .filter-price {
+                width: 100%;
             }
 
             .page-header h1 {
@@ -740,6 +683,15 @@
                 font-size: 12px;
             }
 
+            .filter-price {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .price-input {
+                width: 100%;
+            }
+
             .page-header h1 {
                 font-size: 28px;
             }
@@ -759,8 +711,9 @@
 <!-- Header -->
 <header>
     <div class="container header-top">
-        <a href="#" class="logo">
+        <a href="home.html" class="logo">
             <img src="../images/logobook.png" height="100" width="100" alt="BookNest Logo"/>
+            <span class="logo-text"></span>
         </a>
         <div class="search-bar">
             <input type="text" placeholder="Search by title, author, ISBN or keywords...">
@@ -786,11 +739,11 @@
             <ul class="nav-tabs">
                 <li><a href="home.html">All Books</a></li>
                 <li><a href="bestseller.html">Bestsellers</a></li>
-                <li><a href="awardswinner.html" class="active">Award Winners</a></li>
+                <li><a href="awardswinner.html">Award Winners</a></li>
                 <li><a href="newrelease.html">New Releases</a></li>
                 <li><a href="newarrivals.html">New Arrivals</a></li>
                 <li><a href="comingsoon.html">Coming Soon</a></li>
-                <li><a href="deals.html">Deals</a></li>
+                <li><a href="deals.html" class="active">Deals</a></li>
             </ul>
         </div>
     </nav>
@@ -800,8 +753,8 @@
 <section class="page-header">
     <div class="header-pattern"></div>
     <div class="page-header-content">
-        <h1>BookNest Award Winners</h1>
-        <p>Discover award-winning books.</p>
+        <h1>BookNest Deals</h1>
+        <p>Unmissable offers on your favorite books—grab them before they’re gone!</p>
     </div>
 </section>
 
@@ -809,123 +762,42 @@
 <main class="container">
     <!-- Filter Section -->
     <section class="filter-section">
-        <div class="filter-header">
-            <h2 class="filter-title">Filter Award Winners</h2>
-            <button class="filter-reset">Reset All</button>
-        </div>
-        <div class="filter-grid">
-            <div class="filter-group">
-                <label class="filter-label">Genre</label>
-                <select class="filter-select">
-                    <option value="">All Genres</option>
-                    <option value="fiction">Fiction</option>
-                    <option value="non-fiction">Non-Fiction</option>
-                    <option value="mystery">Mystery & Thriller</option>
-                    <option value="sci-fi">Science Fiction</option>
-                    <option value="fantasy">Fantasy</option>
-                    <option value="romance">Romance</option>
-                    <option value="biography">Biography</option>
-                </select>
+        <div class="filter-price">
+            <label class="filter-label">Price Range</label>
+            <div class="price-range">
+                <input type="number" placeholder="Min" class="price-input">
+                <span>-</span>
+                <input type="number" placeholder="Max" class="price-input">
             </div>
-            <div class="filter-group">
-                <label class="filter-label">Author</label>
-                <select class="filter-select">
-                    <option value="">All Authors</option>
-                    <option value="lee">Harper Lee</option>
-                    <option value="salinger">J.D. Salinger</option>
-                    <option value="steinbeck">John Steinbeck</option>
-                    <option value="morrison">Toni Morrison</option>
-                    <option value="atwood">Margaret Atwood</option>
-                </select>
+            <div class="filter-actions">
+                <button class="btn btn-sm btn-filter">Apply Filters</button>
             </div>
-            <div class="filter-group">
-                <label class="filter-label">Format</label>
-                <select class="filter-select">
-                    <option value="">All Formats</option>
-                    <option value="paperback">Paperback</option>
-                    <option value="hardcover">Hardcover</option>
-                    <option value="signed">Signed Edition</option>
-                    <option value="limited">Limited Edition</option>
-                    <option value="first">First Edition</option>
-                    <option value="collectors">Collector's Edition</option>
-                </select>
-            </div>
-            <div class="filter-group">
-                <label class="filter-label">Price Range</label>
-                <div class="price-range">
-                    <input type="number" placeholder="Min" class="price-input">
-                    <span>-</span>
-                    <input type="number" placeholder="Max" class="price-input">
-                </div>
-            </div>
-            <div class="filter-group">
-                <label class="filter-label">Rating</label>
-                <select class="filter-select">
-                    <option value="">All Ratings</option>
-                    <option value="4">4★ & Above</option>
-                    <option value="3">3★ & Above</option>
-                    <option value="2">2★ & Above</option>
-                    <option value="1">1★ & Above</option>
-                </select>
-            </div>
-            <div class="filter-group">
-                <label class="filter-label">Language</label>
-                <select class="filter-select">
-                    <option value="">All Languages</option>
-                    <option value="en">English</option>
-                    <option value="fr">French</option>
-                    <option value="es">Spanish</option>
-                    <option value="de">German</option>
-                    <option value="it">Italian</option>
-                </select>
-            </div>
-            <div class="filter-group">
-                <label class="filter-label">Publisher</label>
-                <select class="filter-select">
-                    <option value="">All Publishers</option>
-                    <option value="penguin">Penguin Random House</option>
-                    <option value="harpercollins">HarperCollins</option>
-                    <option value="scholastic">Scholastic</option>
-                    <option value="simon">Simon & Schuster</option>
-                </select>
-            </div>
-            <div class="filter-group">
-                <label class="filter-label">Availability</label>
-                <select class="filter-select">
-                    <option value="">All</option>
-                    <option value="in-stock">In Stock</option>
-                    <option value="library">Available in Library</option>
-                </select>
-            </div>
-        </div>
-        <div class="filter-actions">
-            <button class="btn btn-sm btn-filter">Apply Filters</button>
         </div>
     </section>
 
-    <!-- Award Winners Section -->
+    <!-- Deals Section -->
     <section class="section">
         <div class="section-header">
-            <h2 class="section-title">Award Winners</h2>
+            <h2 class="section-title">Exclusive Deals</h2>
         </div>
         <div class="book-grid">
             <!-- Book 1 -->
             <div class="book-card">
                 <div class="book-cover">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/4f/To_Kill_a_Mockingbird_%28first_edition_cover%29.jpg" alt="To Kill a Mockingbird">
-                    <span class="book-badge">Pulitzer Prize</span>
+                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="The Starless Tide">
+                    <span class="book-badge">Buy 2, Get 1 Free</span>
                 </div>
                 <div class="book-info">
-                    <h3 class="book-title">To Kill a Mockingbird</h3>
-                    <p class="book-author">Harper Lee</p>
+                    <h3 class="book-title">The Starless Tide</h3>
+                    <p class="book-author">Emma Thompson</p>
                     <div class="book-price">
-                        <span class="current-price">$14.99</span>
-                        <span class="original-price">$18.99</span>
-                        <span class="discount-percent">-21%</span>
+                        <span class="current-price">$15.99</span>
+                        <span class="original-price">$22.99</span>
+                        <span class="discount-percent">-30%</span>
                     </div>
                     <div class="book-rating">
-                        <span class="rating-stars">★★★★★</span>
-                        <span class="rating-count">(528)</span>
+                        <span class="rating-stars">★★★★☆</span>
+                        <span class="rating-count">(320)</span>
                     </div>
                     <div class="book-actions">
                         <a href="#" class="btn btn-sm btn-cart">Add to Cart</a>
@@ -936,18 +808,20 @@
             <!-- Book 2 -->
             <div class="book-card">
                 <div class="book-cover">
-                    <img src="https://upload.wikimedia.org/wikipedia/en/8/8e/The_Catcher_in_the_Rye_%281951%2C_first_edition%29.jpg" alt="The Catcher in the Rye">
-                    <span class="book-badge">Literary Award</span>
+                    <img src="https://images.unsplash.com/photo-1600585154526-990d71e82f61?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="Echoes of Eternity">
+                    <span class="book-badge">Buy 2, Get 1 Free</span>
                 </div>
                 <div class="book-info">
-                    <h3 class="book-title">The Catcher in the Rye</h3>
-                    <p class="book-author">J.D. Salinger</p>
+                    <h3 class="book-title">Echoes of Eternity</h3>
+                    <p class="book-author">Vikram Singh</p>
                     <div class="book-price">
-                        <span class="current-price">$13.99</span>
+                        <span class="current-price">$12.99</span>
+                        <span class="original-price">$19.99</span>
+                        <span class="discount-percent">-35%</span>
                     </div>
                     <div class="book-rating">
                         <span class="rating-stars">★★★★☆</span>
-                        <span class="rating-count">(412)</span>
+                        <span class="rating-count">(280)</span>
                     </div>
                     <div class="book-actions">
                         <a href="#" class="btn btn-sm btn-cart">Add to Cart</a>
@@ -958,20 +832,20 @@
             <!-- Book 3 -->
             <div class="book-card">
                 <div class="book-cover">
-                    <img src="https://upload.wikimedia.org/wikipedia/en/9/93/TheGrapesOfWrath.jpg" alt="The Grapes of Wrath">
-                    <span class="book-badge">Pulitzer Prize</span>
+                    <img src="https://images.unsplash.com/photo-1600585154224-9f8e0a2e0fb9?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="The Forgotten Realm">
+                    <span class="book-badge">50% Off</span>
                 </div>
                 <div class="book-info">
-                    <h3 class="book-title">The Grapes of Wrath</h3>
-                    <p class="book-author">John Steinbeck</p>
+                    <h3 class="book-title">The Forgotten Realm</h3>
+                    <p class="book-author">Clara Martinez</p>
                     <div class="book-price">
-                        <span class="current-price">$16.99</span>
+                        <span class="current-price">$10.49</span>
                         <span class="original-price">$20.99</span>
-                        <span class="discount-percent">-19%</span>
+                        <span class="discount-percent">-50%</span>
                     </div>
                     <div class="book-rating">
-                        <span class="rating-stars">★★★★★</span>
-                        <span class="rating-count">(387)</span>
+                        <span class="rating-stars">★★★☆☆</span>
+                        <span class="rating-count">(150)</span>
                     </div>
                     <div class="book-actions">
                         <a href="#" class="btn btn-sm btn-cart">Add to Cart</a>
@@ -982,18 +856,20 @@
             <!-- Book 4 -->
             <div class="book-card">
                 <div class="book-cover">
-                    <img src="https://upload.wikimedia.org/wikipedia/en/1/1e/Beloved_Toni_Morrison.jpg" alt="Beloved">
-                    <span class="book-badge">Nobel Prize</span>
+                    <img src="https://images.unsplash.com/photo-1600585154495-75a84b6a5c9a?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="Dawn's Reckoning">
+                    <span class="book-badge">Clearance Sale</span>
                 </div>
                 <div class="book-info">
-                    <h3 class="book-title">Beloved</h3>
-                    <p class="book-author">Toni Morrison</p>
+                    <h3 class="book-title">Dawn's Reckoning</h3>
+                    <p class="book-author">Wei Li</p>
                     <div class="book-price">
-                        <span class="current-price">$15.49</span>
+                        <span class="current-price">$8.99</span>
+                        <span class="original-price">$20.99</span>
+                        <span class="discount-percent">-57%</span>
                     </div>
                     <div class="book-rating">
                         <span class="rating-stars">★★★★☆</span>
-                        <span class="rating-count">(295)</span>
+                        <span class="rating-count">(210)</span>
                     </div>
                     <div class="book-actions">
                         <a href="#" class="btn btn-sm btn-cart">Add to Cart</a>
@@ -1004,20 +880,20 @@
             <!-- Book 5 -->
             <div class="book-card">
                 <div class="book-cover">
-                    <img src="https://upload.wikimedia.org/wikipedia/en/3/33/TheHandmaidsTale.jpg" alt="The Handmaid's Tale">
-                    <span class="book-badge">Governor General</span>
+                    <img src="https://images.unsplash.com/photo-1600585154517-2c1b2c7d8e6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="The Endless Path">
+                    <span class="book-badge">Limited Offer</span>
                 </div>
                 <div class="book-info">
-                    <h3 class="book-title">The Handmaid's Tale</h3>
-                    <p class="book-author">Margaret Atwood</p>
+                    <h3 class="book-title">The Endless Path</h3>
+                    <p class="book-author">Nathan Jones</p>
                     <div class="book-price">
-                        <span class="current-price">$12.99</span>
-                        <span class="original-price">$16.99</span>
-                        <span class="discount-percent">-24%</span>
+                        <span class="current-price">$14.99</span>
+                        <span class="original-price">$23.99</span>
+                        <span class="discount-percent">-38%</span>
                     </div>
                     <div class="book-rating">
-                        <span class="rating-stars">★★★★☆</span>
-                        <span class="rating-count">(451)</span>
+                        <span class="rating-stars">★★★★★</span>
+                        <span class="rating-count">(390)</span>
                     </div>
                     <div class="book-actions">
                         <a href="#" class="btn btn-sm btn-cart">Add to Cart</a>
@@ -1056,8 +932,11 @@
                 <ul class="footer-links">
                     <li><a href="home.html">All Books</a></li>
                     <li><a href="bestseller.html">Bestsellers</a></li>
+                    <li><a href="awardswinner.html">Award Winners</a></li>
                     <li><a href="newrelease.html">New Releases</a></li>
-                    <li><a href="#">Gift Cards</a></li>
+                    <li><a href="newarrivals.html">New Arrivals</a></li>
+                    <li><a href="comingsoon.html" class="active">Coming Soon</a></li>
+                    <li><a href="deals.html">Deals</a></li>
                 </ul>
             </div>
             <div class="footer-column">
