@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using LibraryManagementSystem.Data;
 using LibraryManagementSystem.Entities;
 using LibraryManagementSystem.Dto;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LibraryManagementSystem.Controllers
 {
@@ -18,6 +19,7 @@ namespace LibraryManagementSystem.Controllers
         }
 
         // GET: api/book
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BookDto>>> GetBooks()
         {
@@ -26,7 +28,7 @@ namespace LibraryManagementSystem.Controllers
                 .Include(b => b.Reviews)
                 .Select(b => new BookDto
                 {
-                    BookId = b.Id,
+                    Id = b.Id,
                     BookName = b.BookName,
                     Writer = b.Writer,
                     Genre = b.Genre,
@@ -47,6 +49,7 @@ namespace LibraryManagementSystem.Controllers
 
 
         // GET: api/book/5
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<Book>> GetBook(int id)
         {
@@ -62,6 +65,8 @@ namespace LibraryManagementSystem.Controllers
         }
 
         // POST: api/book
+        // Only Admins can CREATE books
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<Book>> CreateBook([FromForm] BookCreateDto dto)
         {
@@ -104,30 +109,58 @@ namespace LibraryManagementSystem.Controllers
 
 
         // PUT: api/book/5
+        // Only Admins can UPDATE books
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateBook(int id, Book updatedBook)
+        public async Task<IActionResult> UpdateBook(int id, [FromForm] BookUpdateDto dto)
         {
-            if (id != updatedBook.Id)
-                return BadRequest();
+            if (id != dto.Id)
+                return BadRequest("Mismatched book ID.");
 
-            _context.Entry(updatedBook).State = EntityState.Modified;
+            var book = await _context.Books.FindAsync(id);
+            if (book == null)
+                return NotFound("Book not found.");
 
-            try
+            // 📷 Handle optional image update
+            if (dto.BookImage != null)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!_context.Books.Any(b => b.Id == id))
-                    return NotFound();
+                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(dto.BookImage.FileName);
+                var filePath = Path.Combine("wwwroot/images", fileName);
 
-                throw;
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await dto.BookImage.CopyToAsync(stream);
+                }
+
+                book.ImageUrl = "/images/" + fileName;
             }
 
-            return NoContent();
+            // 📝 Update other fields
+            book.BookName = dto.BookName;
+            book.Writer = dto.Writer;
+            book.Genre = dto.Genre;
+            book.ReleaseDate = DateTime.SpecifyKind(dto.ReleaseDate, DateTimeKind.Utc);
+            book.Price = dto.Price;
+            book.Language = dto.Language;
+            book.Format = dto.Format;
+            book.PublisherId = dto.PublisherId;
+            book.Stock = dto.Stock;
+            book.Description = dto.Description;
+            book.IsOnSale = dto.IsOnSale;
+            book.DiscountPercentage = dto.DiscountPercentage;
+            book.DiscountStartDate = dto.DiscountStartDate;
+            book.DiscountEndDate = dto.DiscountEndDate;
+
+            await _context.SaveChangesAsync();
+
+            //return NoContent();
+            return Ok(book);
         }
 
+
         // DELETE: api/book/5
+        // ✅ Only Admins can DELETE books
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBook(int id)
         {

@@ -4,7 +4,7 @@ namespace LibraryManagementSystem.Dto
 {
     public class LoginDto
     {
-        [Required]
+        [Required, EmailAddress]
         public string Email { get; set; }
 
         [Required]

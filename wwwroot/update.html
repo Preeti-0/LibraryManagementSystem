@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Book</title>
+</head>
+<body>
+    <h1>Update Book</h1>
+    <form id="updateForm" enctype="multipart/form-data">
+        <input type="number" name="Id" placeholder="Book ID" required><br><br>
+        <input type="text" name="BookName" placeholder="Book Name" required><br><br>
+        <input type="text" name="Writer" placeholder="Writer"><br><br>
+        <input type="text" name="Genre" placeholder="Genre"><br><br>
+        <input type="datetime-local" name="ReleaseDate"><br><br>
+        <input type="file" name="BookImage"><br><br>
+        <input type="number" name="Price" placeholder="Price"><br><br>
+        <input type="text" name="Language" placeholder="Language"><br><br>
+        <input type="text" name="Format" placeholder="Format"><br><br>
+        <input type="number" name="PublisherId" placeholder="Publisher ID"><br><br>
+        <input type="number" name="Stock" placeholder="Stock"><br><br>
+        <textarea name="Description" placeholder="Description"></textarea><br><br>
+        <label>On Sale: <input type="checkbox" name="IsOnSale"></label><br><br>
+        <input type="number" step="0.01" name="DiscountPercentage" placeholder="Discount %"><br><br>
+        <input type="datetime-local" name="DiscountStartDate"><br><br>
+        <input type="datetime-local" name="DiscountEndDate"><br><br>
+        <button type="submit">Update Book</button>
+    </form>
+
+    <script>
+        document.getElementById('updateForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const form = e.target;
+            const formData = new FormData(form);
+            const bookId = formData.get('Id');
+
+            const response = await fetch(`http://localhost:5275/api/book/${bookId}`, {
+                method: 'PUT',
+                body: formData
+            });
+
+            if (response.ok) {
+                alert('Book updated successfully!');
+            } else {
+                const error = await response.text();
+                alert('Failed to update book: ' + error);
+            }
+        });
+    </script>
+</body>
+</html>

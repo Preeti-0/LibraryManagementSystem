@@ -4,22 +4,16 @@ namespace LibraryManagementSystem.Dto
 {
     public class BookDto
     {
-        [Key]
-        public int BookId { get; set; }
+        public int Id { get; set; }  // ✅ Use Id, not BookId
 
-        [Required]
         public string BookName { get; set; }
 
-        [Required]
         public string Writer { get; set; }
 
-        [Required]
         public string Genre { get; set; }
 
-        [Required]
         public DateTime ReleaseDate { get; set; }
 
-        [Required]
         public string PhotoPath { get; set; }
 
         public decimal Price { get; set; }
