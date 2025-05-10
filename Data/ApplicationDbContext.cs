@@ -37,5 +37,31 @@ namespace LibraryManagementSystem.Data
                 .HasIndex(r => new { r.BookId, r.MemberId })
                 .IsUnique();
         }
+
+        public void SeedAdminUser()
+        {
+            var admin = Members.FirstOrDefault(u => u.Email == "versebook050@gmail.com");
+            if (admin == null)
+            {
+                Members.Add(new Member
+                {
+                    Name = "Admin",
+                    Email = "versebook050@gmail.com",
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin@123"),
+                    Role = "Admin",
+                    MembershipId = Guid.NewGuid().ToString(),
+                    IsVerified = true
+                });
+            }
+            else if (!admin.IsVerified || admin.Role != "Admin")
+            {
+                admin.IsVerified = true;
+                admin.Role = "Admin";
+            }
+
+            SaveChanges();
+        }
+
+
     }
 }

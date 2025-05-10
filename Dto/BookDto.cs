@@ -4,7 +4,7 @@ namespace LibraryManagementSystem.Dto
 {
     public class BookDto
     {
-        public int Id { get; set; }  // ✅ Use Id, not BookId
+        public int Id { get; set; }
 
         public string BookName { get; set; }
 
@@ -13,6 +13,12 @@ namespace LibraryManagementSystem.Dto
         public string Genre { get; set; }
 
         public DateTime ReleaseDate { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+
+        public string ISBN { get; set; }
+
+        public string EditionType { get; set; }
 
         public string PhotoPath { get; set; }
 
@@ -28,6 +34,15 @@ namespace LibraryManagementSystem.Dto
 
         public bool IsOnSale { get; set; }
 
+        public decimal? DiscountPercentage { get; set; }
+
         public int Stock { get; set; }
+
+        public bool IsAwardWinner { get; set; }
+
+        public bool IsAvailableInLibrary { get; set; }
+
+        public int SalesCount { get; set; }
     }
+
 }

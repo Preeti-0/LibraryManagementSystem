@@ -33,6 +33,13 @@ namespace LibraryManagementSystem.Dto
         [Required]
         public int Stock { get; set; }
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
+
+        // ✅ NEW Optional Fields
+        public string? ISBN { get; set; }
+
+        public string? EditionType { get; set; }
+
+        public bool IsAvailableInLibrary { get; set; } = false;
     }
 }

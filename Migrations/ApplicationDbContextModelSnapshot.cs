@@ -58,6 +58,9 @@ namespace LibraryManagementSystem.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
@@ -71,6 +74,10 @@ namespace LibraryManagementSystem.Migrations
                     b.Property<DateTime?>("DiscountStartDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("EditionType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Format")
                         .IsRequired()
                         .HasColumnType("text");
@@ -82,9 +89,19 @@ namespace LibraryManagementSystem.Migrations
                     b.Property<int?>("GenreId")
                         .HasColumnType("integer");
 
+                    b.Property<string>("ISBN")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<bool>("IsAvailableInLibrary")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsAwardWinner")
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsOnSale")
                         .HasColumnType("boolean");
@@ -101,6 +118,9 @@ namespace LibraryManagementSystem.Migrations
 
                     b.Property<DateTime>("ReleaseDate")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("SalesCount")
+                        .HasColumnType("integer");
 
                     b.Property<int>("Stock")
                         .HasColumnType("integer");
@@ -179,6 +199,19 @@ namespace LibraryManagementSystem.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("EmailConfirmationToken")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("EmailVerificationToken")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsVerified")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("MembershipId")
                         .IsRequired()
                         .HasColumnType("text");
@@ -188,6 +221,10 @@ namespace LibraryManagementSystem.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Role")
                         .IsRequired()
                         .HasColumnType("text");
 

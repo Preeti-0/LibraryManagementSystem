@@ -33,6 +33,9 @@ namespace LibraryManagementSystem.Controllers
                     Writer = b.Writer,
                     Genre = b.Genre,
                     ReleaseDate = b.ReleaseDate,
+                    CreatedAt = b.CreatedAt,
+                    ISBN = b.ISBN,
+                    EditionType = b.EditionType,
                     PhotoPath = b.ImageUrl,
                     Price = b.Price,
                     Language = b.Language,
@@ -40,13 +43,16 @@ namespace LibraryManagementSystem.Controllers
                     PublisherName = b.Publisher.Name,
                     AverageRating = b.Reviews.Any() ? b.Reviews.Average(r => r.Rating) : 0,
                     IsOnSale = b.IsOnSale,
-                    Stock = b.Stock
+                    DiscountPercentage = b.DiscountPercentage,
+                    Stock = b.Stock,
+                    IsAwardWinner = b.IsAwardWinner,
+                    IsAvailableInLibrary = b.IsAvailableInLibrary,
+                    SalesCount = b.SalesCount
                 })
                 .ToListAsync();
 
             return Ok(books);
         }
-
 
         // GET: api/book/5
         [AllowAnonymous]
@@ -65,12 +71,11 @@ namespace LibraryManagementSystem.Controllers
         }
 
         // POST: api/book
-        // Only Admins can CREATE books
+        // POST: api/book
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<Book>> CreateBook([FromForm] BookCreateDto dto)
         {
-            // ✅ Simulate image upload (you can later add real Cloud or disk upload)
             string imageUrl = "";
             if (dto.BookImage != null)
             {
@@ -98,7 +103,13 @@ namespace LibraryManagementSystem.Controllers
                 PublisherId = dto.PublisherId,
                 Stock = dto.Stock,
                 Description = dto.Description,
-                IsOnSale = false // default
+                IsOnSale = false,
+
+                // ✅ NEW FIELDS
+                ISBN = dto.ISBN,
+                EditionType = dto.EditionType,
+                IsAvailableInLibrary = dto.IsAvailableInLibrary,
+                CreatedAt = DateTime.UtcNow
             };
 
             _context.Books.Add(book);
@@ -109,7 +120,6 @@ namespace LibraryManagementSystem.Controllers
 
 
         // PUT: api/book/5
-        // Only Admins can UPDATE books
         [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateBook(int id, [FromForm] BookUpdateDto dto)
@@ -121,7 +131,6 @@ namespace LibraryManagementSystem.Controllers
             if (book == null)
                 return NotFound("Book not found.");
 
-            // 📷 Handle optional image update
             if (dto.BookImage != null)
             {
                 var fileName = Guid.NewGuid().ToString() + Path.GetExtension(dto.BookImage.FileName);
@@ -135,7 +144,6 @@ namespace LibraryManagementSystem.Controllers
                 book.ImageUrl = "/images/" + fileName;
             }
 
-            // 📝 Update other fields
             book.BookName = dto.BookName;
             book.Writer = dto.Writer;
             book.Genre = dto.Genre;
@@ -153,13 +161,10 @@ namespace LibraryManagementSystem.Controllers
 
             await _context.SaveChangesAsync();
 
-            //return NoContent();
             return Ok(book);
         }
 
-
         // DELETE: api/book/5
-        // ✅ Only Admins can DELETE books
         [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBook(int id)
@@ -172,6 +177,75 @@ namespace LibraryManagementSystem.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        [AllowAnonymous]
+        [HttpGet("new-releases")]
+        public async Task<IActionResult> GetNewReleases()
+        {
+            var cutoff = DateTime.UtcNow.AddMonths(-3);
+            var books = await _context.Books
+                .Where(b => b.ReleaseDate >= cutoff)
+                .Include(b => b.Publisher)
+                .Include(b => b.Reviews)
+                .ToListAsync();
+
+            return Ok(books);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("new-arrivals")]
+        public async Task<IActionResult> GetNewArrivals()
+        {
+            var cutoff = DateTime.UtcNow.AddMonths(-1);
+            var books = await _context.Books
+                .Where(b => b.CreatedAt >= cutoff)
+                .Include(b => b.Publisher)
+                .Include(b => b.Reviews)
+                .ToListAsync();
+
+            return Ok(books);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("bestsellers")]
+        public async Task<IActionResult> GetBestsellers()
+        {
+            var books = await _context.Books
+                .OrderByDescending(b => b.SalesCount)
+                .Take(20)
+                .Include(b => b.Publisher)
+                .Include(b => b.Reviews)
+                .ToListAsync();
+
+            return Ok(books);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("deals")]
+        public async Task<IActionResult> GetDeals()
+        {
+            var today = DateTime.UtcNow;
+            var books = await _context.Books
+                .Where(b => b.IsOnSale && b.DiscountStartDate <= today && b.DiscountEndDate >= today)
+                .Include(b => b.Publisher)
+                .Include(b => b.Reviews)
+                .ToListAsync();
+
+            return Ok(books);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("award-winners")]
+        public async Task<IActionResult> GetAwardWinners()
+        {
+            var books = await _context.Books
+                .Where(b => b.IsAwardWinner)
+                .Include(b => b.Publisher)
+                .Include(b => b.Reviews)
+                .ToListAsync();
+
+            return Ok(books);
         }
     }
 }

@@ -16,7 +16,11 @@ namespace LibraryManagementSystem.Entities
 
         public DateTime ReleaseDate { get; set; }
 
-        public string ImageUrl { get; set; }
+        public string? ISBN { get; set; }  // NEW
+
+        public string? EditionType { get; set; }  // NEW
+
+        public string? ImageUrl { get; set; }
 
         public decimal Price { get; set; }
 
@@ -25,11 +29,13 @@ namespace LibraryManagementSystem.Entities
         public string Format { get; set; }
 
         public int PublisherId { get; set; }
-        public Publisher Publisher { get; set; }
+        public Publisher? Publisher { get; set; }
 
         public int Stock { get; set; }
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
+
+        public bool IsAvailableInLibrary { get; set; }  // NEW
 
         public bool IsOnSale { get; set; }
 
@@ -39,8 +45,15 @@ namespace LibraryManagementSystem.Entities
 
         public DateTime? DiscountEndDate { get; set; }
 
-        public ICollection<Review> Reviews { get; set; }
+        public bool IsAwardWinner { get; set; }  // NEW
 
-        public ICollection<OrderItem> OrderItems { get; set; }
+        public int SalesCount { get; set; } = 0;  // NEW
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;  // NEW
+
+        public ICollection<Review>? Reviews { get; set; }
+
+        public ICollection<OrderItem>? OrderItems { get; set; }
     }
+
 }

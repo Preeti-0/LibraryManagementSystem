@@ -16,6 +16,11 @@ namespace LibraryManagementSystem.Entities
 
         [Required]
         public string Role { get; set; } = "Member"; // Could be: Member, Staff, Admin
+        public bool EmailConfirmed { get; set; } = false;
+        public string EmailConfirmationToken { get; set; } = Guid.NewGuid().ToString();
+
+        public string? EmailVerificationToken { get; set; }
+        public bool IsVerified { get; set; } = false;
 
 
         public ICollection<Order> Orders { get; set; }
