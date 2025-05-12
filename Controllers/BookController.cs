@@ -21,11 +21,18 @@ namespace LibraryManagementSystem.Controllers
         // GET: api/book
         [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BookDto>>> GetBooks()
+        public async Task<IActionResult> GetBooks([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
-            var books = await _context.Books
+            var query = _context.Books
                 .Include(b => b.Publisher)
                 .Include(b => b.Reviews)
+                .OrderBy(b => b.Id);
+
+            var totalCount = await query.CountAsync();
+
+            var books = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .Select(b => new BookDto
                 {
                     Id = b.Id,
@@ -44,6 +51,8 @@ namespace LibraryManagementSystem.Controllers
                     AverageRating = b.Reviews.Any() ? b.Reviews.Average(r => r.Rating) : 0,
                     IsOnSale = b.IsOnSale,
                     DiscountPercentage = b.DiscountPercentage,
+                    DiscountStartDate = b.DiscountStartDate,
+                    DiscountEndDate = b.DiscountEndDate,
                     Stock = b.Stock,
                     IsAwardWinner = b.IsAwardWinner,
                     IsAvailableInLibrary = b.IsAvailableInLibrary,
@@ -51,8 +60,15 @@ namespace LibraryManagementSystem.Controllers
                 })
                 .ToListAsync();
 
-            return Ok(books);
+            return Ok(new
+            {
+                TotalCount = totalCount,
+                Page = page,
+                PageSize = pageSize,
+                Books = books
+            });
         }
+
 
         // GET: api/book/5
         [AllowAnonymous]
@@ -178,6 +194,25 @@ namespace LibraryManagementSystem.Controllers
 
             return NoContent();
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut("update-discount/{id}")]
+        public async Task<IActionResult> UpdateDiscount(int id, [FromBody] DiscountDto dto)
+        {
+            var book = await _context.Books.FindAsync(id);
+            if (book == null)
+                return NotFound("Book not found.");
+
+            book.IsOnSale = dto.IsOnSale;
+            book.DiscountPercentage = dto.DiscountPercentage;
+            book.DiscountStartDate = dto.DiscountStartDate;
+            book.DiscountEndDate = dto.DiscountEndDate;
+
+            await _context.SaveChangesAsync();
+
+            return Ok("Discount updated successfully.");
+        }
+
 
         [AllowAnonymous]
         [HttpGet("new-releases")]

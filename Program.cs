@@ -7,11 +7,17 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using LibraryManagementSystem.Services.Interface;
 using LibraryManagementSystem.Services;
+using LibraryManagementSystem.Hubs;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddTransient<IEmailService, EmailService>();
+builder.Services.AddSignalR();
+
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
@@ -108,6 +114,8 @@ app.UseCors("AllowAll");
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.MapHub<OrderHub>("/orderHub");
+
 
 app.MapControllers();
 

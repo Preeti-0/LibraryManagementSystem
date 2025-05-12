@@ -43,6 +43,10 @@ namespace LibraryManagementSystem.Dto
         public bool IsAvailableInLibrary { get; set; }
 
         public int SalesCount { get; set; }
+
+        public DateTime? DiscountStartDate { get; set; }
+
+        public DateTime? DiscountEndDate { get; set; }
     }
 
 }
