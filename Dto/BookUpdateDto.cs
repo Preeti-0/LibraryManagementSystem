@@ -38,5 +38,7 @@ namespace LibraryManagementSystem.Dto
         public DateTime? DiscountStartDate { get; set; }
 
         public DateTime? DiscountEndDate { get; set; }
+
+        public bool IsAvailableInLibrary { get; set; }
     }
 }

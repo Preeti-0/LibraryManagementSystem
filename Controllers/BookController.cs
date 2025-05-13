@@ -174,7 +174,7 @@ namespace LibraryManagementSystem.Controllers
             book.DiscountPercentage = dto.DiscountPercentage;
             book.DiscountStartDate = dto.DiscountStartDate;
             book.DiscountEndDate = dto.DiscountEndDate;
-
+            book.IsAvailableInLibrary = dto.IsAvailableInLibrary;
             await _context.SaveChangesAsync();
 
             return Ok(book);

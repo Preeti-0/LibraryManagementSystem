@@ -31,5 +31,39 @@ namespace LibraryManagementSystem.Controllers
 
             return Ok($"User {user.Name}'s role updated to {user.Role}");
         }
+
+        // ✅ New: Get list of users
+        [HttpGet("users")]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var users = await _context.Members
+                .Select(u => new
+                {
+                    u.Id,              //  Correct field
+                    u.Name,
+                    u.Email,
+                    u.Role,
+                    u.IsVerified       //  Correct verification field
+                })
+                .ToListAsync();
+
+            return Ok(users);
+        }
+
+
+        // ✅ New: Delete a user by id
+        [HttpDelete("users/{id}")]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            var user = await _context.Members.FindAsync(id);
+            if (user == null)
+                return NotFound(new { message = "User not found." });
+
+            _context.Members.Remove(user);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "User deleted successfully." });
+        }
+
     }
 }
